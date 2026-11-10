@@ -321,7 +321,17 @@ worshipDateInput.addEventListener("change", () => {
 // ---- Init ----
 (function init() {
   applyI18n();
-  worshipDateInput.value = todayInputValue();
+   // Default to the upcoming Sunday (or today if today is Sunday)
+  const nextSunday = new Date();
+  const daysUntilSunday = (7 - nextSunday.getDay()) % 7;
+  nextSunday.setDate(nextSunday.getDate() + daysUntilSunday);
+
+  worshipDateInput.value =
+    nextSunday.getFullYear() + "-" +
+    String(nextSunday.getMonth() + 1).padStart(2, "0") + "-" +
+    String(nextSunday.getDate()).padStart(2, "0");
+
+  // Set the filename based on the selected worship date
   filenameInput.value = dateInputToShortYear(worshipDateInput.value);
 })();
 
